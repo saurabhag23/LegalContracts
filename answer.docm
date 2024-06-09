@@ -1,0 +1,42 @@
+Sub CompareDocumentsWithTrackChanges()
+    Dim originalDoc As String
+    Dim modifiedDoc As String
+    Dim outputDoc As String
+    
+    ' Set the file paths for the original, modified, and output documents
+    originalDoc = "/Users/saurabhagrawal/Desktop/example/playbook2.docx"
+    modifiedDoc = "/Users/saurabhagrawal/Desktop/example/answer1.docx"
+    outputDoc = "/Users/saurabhagrawal/Desktop/example/answerk.docx"
+    
+    Dim wdDoc As Document
+    Dim wdDoc2 As Document
+    
+    ' Open the original document
+    Set wdDoc = Documents.Open(FileName:=originalDoc)
+    
+    ' Open the modified document
+    Set wdDoc2 = Documents.Open(FileName:=modifiedDoc)
+    
+    ' Compare the original document with the modified document
+    ' The changes will be tracked in the modified document (wdDoc2)
+    wdDoc2.Compare Name:=originalDoc
+    
+    ' Save the modified document with track changes as the output document
+    wdDoc2.SaveAs2 FileName:=outputDoc
+    
+    ' Close the original document without saving changes
+    wdDoc.Close SaveChanges:=False
+    
+    ' Close the modified document without saving changes
+    wdDoc2.Close SaveChanges:=False
+    
+    ' Open the output document
+    Set wdDoc = Documents.Open(FileName:=outputDoc)
+    
+    ' Show the Reviewing Pane for accepting/rejecting changes
+    wdDoc.ActiveWindow.View.SplitSpecial = wdPaneRevisions
+    
+    ' Save and close the output document
+    wdDoc.Save
+    wdDoc.Close
+End Sub
